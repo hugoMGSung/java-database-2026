@@ -192,6 +192,78 @@
     - 구조화된 질의 언어
     - 관계형 데이터베이스에서 DBMS상에 데이터를 정의, 조작, 제어하기 위해 사용하는 표준 프로그래밍 언어
 
-## day02
+## Day02
 
-- dfklejwk
+### DBeaver 사용법, DB작업시 사전지식
+- 메뉴 상 용어들
+    - 검색 > `DB Full-Text` - Full Text Search(대용량 텍스트 내에서 필요한 단어를 검색할 때)
+    - SQL 편집기 > `실행계획` - 현재의 쿼리가 실행되는데 비용이 얼마나 발생하는지 파악하는 기술. 최적화 실행속도 빠르게 하기 전에 분석
+    - 데이터베이스 > `트랜잭션` 모드 - 쿼리들이 실행되는 논리적 덩어리, Auto-Commit(조금 위험), None Commit
+
+![alt text](image-10.png)
+
+- 위 스키마 하위에서 지금 알아야 할 내용들
+    - 테이블
+    - 뷰
+    - 인덱스
+    - 스퀀스
+    - 프로시저
+    - 펑션
+    - SQL 문법까지
+
+### 기본, SELECT문
+
+- 문법이전 데이터 타입 일부
+    - `NUMBER` - 숫자타입, 최대 22byte
+    - INTEGER - 정수타입, 모든 데이터 기초 4byte(-21억 ~ +21억)
+    - FLOAT - 실수타입, 소수점포함, 최대 22byte
+    - `CHAR`(n) - Character 문자열타입, 고정형, 최대 2000byte
+        - CHAR(20)기분 'Hello World'를 저장하면, 'Hello World&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' 로 저장됨. 무조건 자리수를 20자리로 고정해서 생성
+    - `VARCHAR2`(n) - 가변형문자열, 최대 4000byte
+        - 오라클에서 VARCHAR(n)는 사용안함
+        - VARCHAR2(20)으로 'Hello World'를 저장하면, 'Hello World'. 뒤에 9자리는 버림.
+    - `LONG`(n) - 가변길이 문자열, 최대 2Gbyte
+    - LONG RAW(n) - 바이너리(이진)데이터, 0과 1의 숫자로만 저장. 최대2Gbyte
+    - CLOB - 대용량 텍스트타입, 최대 4Gbyte
+    - BLOB - 대용량 바이너리타입, 최대 4Gbyte
+    - `DATE` - 날짜타입. 문자열과 다름
+
+- 데이터 조회 3가지 방법
+    - `셀렉션`(Selection) - 행단위로 조회
+    - `프로젝션`(Projection) - 열단위로 조회
+    - `조인`(Join) - 두 개 이상 테이블을 조합해서 조회
+
+- SELECT 문법
+
+    ```sql
+    -- 주석 한줄 주석
+    /* 여러줄 
+       주석(C언어 주석) */
+    -- 기본 문법
+    SELECT [*|열이름 나열]
+      FROM [dual|테이블명];
+
+    -- 별명추가
+    SELECT 컬럼명 [AS 별명], 
+           계산식 AS "별명",
+           ...
+      FROM 테이블명 [테이블별명];
+
+    -- 데이터 정렬
+    SELECT 위와동일
+      FROM 테이블명
+     ORDER BY [정렬할 열이름(여러개)][ASC|DESC];
+    /*
+    ASC - ascending(오름차순)
+    DESC - descending(내림차순)
+    ASC는 기본이고 생략가능
+    */
+
+    -- 조건절 WHERE절
+    -- 원하는 조건으로 다양하게 조회할때
+    SELECT 위와동일
+      FROM 테이블명
+    [WHERE 조회할 행을 선별하는 조건식]
+    [ORDER BY [정렬할 열이름(여러개)][ASC|DESC]];
+    ```
+
