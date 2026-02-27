@@ -191,3 +191,7 @@
 - SQL(Structured Query Language) 
     - 구조화된 질의 언어
     - 관계형 데이터베이스에서 DBMS상에 데이터를 정의, 조작, 제어하기 위해 사용하는 표준 프로그래밍 언어
+
+## day02
+
+- dfklejwk
