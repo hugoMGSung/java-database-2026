@@ -94,7 +94,18 @@
         ``` 
 
         ![alt text](image-4.png)
+
+    - 멈춰있는 컨테이너 실행
+
+        ```bash
+        docker start [컨테이너ID]
+        ```
         
+    - 컨테이너 자동실행 명령
+
+        ```bash
+        docker update --restart=always [컨테이너ID]
+        ```
 
     - 컨테이터 내부 접속
 
@@ -410,4 +421,82 @@ SQL> alter session set nls_date_format='dd-MON-rr';
 
 ## Day04
 
-- 조인 계속
+### 조인 
+
+- 관계형 데이터베이스
+    - 관련된 데이터를 테이블 형태로 저장하고, 테이블간 관계를 통해 데이터를 관리하는 DB모델
+    - 테이블 - 데이터를 저장하는 구조. Table/Entity
+    - 레코드/로우 - 관련 데이터가 모두 모인 하나의 데이터 행. Record/Row/Tuple
+    - 컬럼 - 데이터 특징을 담는 하나의 속성, Column/Attribute
+    - PK - 각 행의 유일하게 식별하는 키. 여러개의 PK를 가질 수도 있음. Primary Key
+    - FK - 부모테이블의 PK와 관계를 맺는 키 Foreign Key
+
+- ERD(Entity Relationship Diagram)
+    - 관계형 데이터베이스 구조를 그림으로 표현한 설계도
+    - 데이터베이스를 만들기 전에 어떤 테이블이 필요하고 어떤 관계를 맺어야 하는지 시각적 표현
+
+![alt text](image-11.png)
+
+- ERD 설명
+    - PK - DEPT.DEPTNO, EMP.EMPNO
+    - FK - EMP.DEPTNO
+    - 일반컬럼 - 그외 나머지 컬럼
+    - 부자관계 - DEPT(부), EMP(자)
+
+
+- 조인 계속 - [쿼리](./day04/1.조인다시.sql)
+    - 등가조인 - `내부조인`, `Inner Join`, Equi Join
+    - 비등가조인 - 등가조인 외의 방법, Between 등 사용. 많이 사용안함
+    - 셀프조인 - 자체조인. 자기 테이블을 조인. 자기 테이블내에 해당 PK와 관련있는 FK가 지정되어 있어야
+        - 대부분 회사에서 조직도, 상사와 부하직원 관계볼때 사용
+    - 외부조인 - 등가조인 반대. `Outer Join`. 조인 기준에서 일치하지 않는 데이터도 조회나오도록 하는 조인
+        - 왼쪽외부조인 - `Left Outer Join`. 왼쪽 테이블 기준으로 오른쪽 테이블에 일치하지 않는 데이터 조회
+        - 오른쪽외부조인 - `Right Outer Join`. 오른쪽 테이블 기준, 왼쪽 테이블에 일치하니 않는 데이터 조회
+
+- SQL-99 표준문법 조인 - [쿼리](./day04/2.표준조인.sql)
+    - JOIN ~ ON, INNER JOIN ~ ON - 내부조인, INNER는 생략 가능
+    - LEFT|RIGHT OUTER JOIN ~ ON - 외부조인, LEFT, RIGHT는 생략 불가능
+
+### 서브쿼리
+
+- 서브쿼리
+    - 메인쿼리 내에 소괄호()로 포함된 추가쿼리. `SubQuery`.
+    - 대부분 조인으로 변경 가능
+    - 대부분 서브쿼리부터 작성 추천
+
+- 서브쿼리 종류 - [쿼리](./day04/3.서브쿼리.sql)
+    - 단일행 서브쿼리 - >, >=, =, <=, <, <>, != 비교연산자로 서브쿼리 사용
+    - 다중행 서브쿼리 
+        - `IN` - 메인쿼리 데이터가 서브쿼리 결과중 하나라도 일치하는 데이터가 있으면
+        - `ANY`, SOME - 메인쿼리의 조건식을 만족하는 서브쿼리의 결과가 하나 이상이면
+        - `ALL` - 메인쿼리의 조건식을 서브쿼리의 결과 모두가 만족하면
+        - `EXISTS` - 서브쿼리의 결과가 존해하면(행이 1개 이상일 경우)
+    - 다중열 서브쿼리 - 서브쿼리 결과가 여러 컬럼일때
+    - FROM절 서브쿼리 - 가상의 테이블을 생성
+    - SELECT절 서브쿼리 - 스칼라 서브쿼리, JOIN으로 변경 가능
+
+### DML
+
+- SQL문은 DML, DDL, DCL 구성
+    - Data Manipulation Language
+    - Data Definition Language
+    - Data Control Language
+
+- DML - [쿼리](./day04/4.DML.sql)
+    - 데이터 조작 언어 - 데이터를 추가, 변경, 삭제, 조회 하는 쿼리 명령어
+    - SELECT - 조회용. 사전 학습
+    - `INSERT` - 생성(추가)용
+        
+        ```sql
+        -- 기본 문법
+        INSERT INTO 테이블명 (열1, 열2, ... , 열n) 
+        VALUES (열1값, 열2값, ...  , 열n값);
+        ```   
+
+    - `UPDATE` - 변경(수정)용. 조심할 것~        
+
+    - `DELETE` - 삭제용. 조심할 것!
+    - SELECT는 저장된 데이터에 조작이 없음. 그 외는 전부 데이터를 조작함
+    - SELECT는 트랜잭션이 없고, 나머지는 트랜잭션이 매우 중요!
+
+
