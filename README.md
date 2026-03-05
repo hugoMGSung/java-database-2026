@@ -477,10 +477,11 @@ SQL> alter session set nls_date_format='dd-MON-rr';
 
 ### DML
 
-- SQL문은 DML, DDL, DCL 구성
+- SQL문은 DML, DDL, DCL, TCL 구성
     - Data Manipulation Language
     - Data Definition Language
     - Data Control Language
+    - Transaction Control Language 
 
 - DML - [쿼리](./day04/4.DML.sql)
     - 데이터 조작 언어 - 데이터를 추가, 변경, 삭제, 조회 하는 쿼리 명령어
@@ -499,4 +500,113 @@ SQL> alter session set nls_date_format='dd-MON-rr';
     - SELECT는 저장된 데이터에 조작이 없음. 그 외는 전부 데이터를 조작함
     - SELECT는 트랜잭션이 없고, 나머지는 트랜잭션이 매우 중요!
 
+
+## Day05
+
+### DML 계속
+
+- DML
+    - `INSERT` - 데이터 생성 [쿼리](./day05/1.INSERT.sql)
+
+        ```sql
+        -- SELECT 결과를 그대로 테이블에 추가가능
+        INSERT INTO 테이블명 (열1, 열2, ... , 열n) 
+        SELECT 열1, 열2, ... , 열n
+        [WHERE 조건절]
+        [기타 SELECT 문]
+        ```
+
+    -  `UPDATE` - 데이터 수정 [쿼리](./day05/2.UPDATE_DELETE.sql)
+        - 기본문법의 WHERE절은 무조건 작성할 것! WHERE절 없는 수정문은 조심할 것!!
+        - WHERE 절에는 제약조건 PK가 우선 작성
+
+        ```sql
+        -- 기본 문법
+        UPDATE 변경할테이블
+           SET 변경열1=열1변경값, 변경열2=열2변경값, ...   -- 모든 열을 다 추가할 필요없음
+         WHERE 데이터변경 대상행을 선별하기위한 조건 -- 매우 중요!
+        ```
+    - `DELETE` - 데이터 삭제
+        - WHERE 절을 빼는 경우 정말 조심할 것!
+
+        ```sql
+        DELETE FROM 테이블
+         WHERE 삭제할대상행 선별하는 조건 -- 매우 중요!
+        ```
+
+### TCL 
+
+- 트랜잭션 - [쿼리](./day05/3.트랜잭션.sql)
+    - 논리적으로 처리되는 쿼리들의 집합
+    - 여러개 테이블에 조회, 수정, 삭제 등이 이뤄지는 논리 덩어리
+    - All or Nothing
+
+- 트랜잭션 설정 - Oracle은 트랜잭션을 시작하는 `BEGIN TRAN[SACTION]` 이 없음
+    - 첫번째 쿼리부터 트랜잭션이 시작됨
+    - DBeaver의 경우 메뉴 데이터베이스 > 트랜잭션 모드 > `Manual Commit`으로 변경
+    - 환경 설정 > 연결 > 연결 유형 > `Auto-commit by default`를 해제
+
+    ![alt text](image-13.png)
+
+    ![alt text](image-12.png)
+
+- 트랜잭션 명령어
+    - `COMMIT` - 영구 반영
+    - `ROLLBACK` - 트랜잭션 취소
+    - `SAVEPOINT` - 트랜잭션 중간 저장
+
+- 세션
+    - 하나의 연결로 접속해서 종료까지 기간 
+
+- 락
+    - 세션별로 트랜잭션이 문제발생 않도록 데이터를 잠그는 처리
+
+### DDL
+
+- 데이터 정의어
+    - 데이터베이스 객체 생성, 변경, 삭제하는 명령어
+
+- DDL 명령어 - [쿼리](./day05/5.DDL.sql)
+    - `CREATE` - 객체 생성. 대부분 테이블 생성 시 사용
+
+        ```sql
+        -- 기본문법
+        CREATE [TABLE|DATABASE|VIEW|등 객체타입] [객체 생성시 필요한 문법];
+
+        -- 테이블 생성 
+        CREATE TABLE 소유자.테이블명 (
+            열1이름  자료형,
+            열2이름  자료형,
+            ...
+            열n이름  자료형[,]
+
+            [각 제약조건]
+        );
+        ```
+    - `ALTER` - 객체 수정. 생성과 달리 수정할 수 있는 객체가 많이 없음
+        ```sql
+        -- 테이블 수정
+        ALTER TABLE 테이블명
+            ADD 열이름  자료형;
+            RENAME COLUMN 이전열이름 TO 새열이름;
+            MODIFY 열이름  변경자료형;
+            DROP COLUMN 삭제할열이름;
+
+        ```
+    - `DROP` - 객체 삭제. ALTER와 달리 대부분 객체에서 사용가능
+        - 데이블 등이 통채로 삭제되면 데이터 삭제. 주의할 것!
+
+        ```sql
+        DROP 객체타입 객체명;
+        ```
+    - `RENAME` - 객체 이름변경. 자주 사용안함
+        ```sql
+        RENAME 이전객체명 TO 새객체명
+        ```
+    - `TRUNCATE` - 객체 내 데이터 모두 삭제. 대부분 테이블에서 진행
+        ```sql
+        -- DELETE FROM 테이블명 과 동일. 단, 트랜잭션이 발생하지않아 복구불가
+        -- 테이블 생성 이후 상태가 됨
+        TRUNCATE TABLE 테이블명
+        ```
 
