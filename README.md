@@ -1139,7 +1139,7 @@ SQL> alter session set nls_date_format='dd-MON-rr';
     - Draw.io - https://app.diagrams.net/ 무료, 다양한 다이어그램. sql변환 불가
     - `erdcloud` - https://www.erdcloud.com/ 모델링에 물리 스키마까지 생성가능한 한국어 지원도구
     - DBeaver - 물리적 테이블 생성 후 다이어그램 확인 가능. 모델링은 불가. 뷰어
-    - MySQL Workbench - 물리적 다이어그램 생성 가능. 생성한 그대로 DB가 됨. 
+    - MySQL Workbench - 논리/물리적 다이어그램 생성 가능. 생성한 그대로 DB가 됨. 
 
 #### ERDCLOUD
 
